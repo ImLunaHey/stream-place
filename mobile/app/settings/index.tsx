@@ -1,4 +1,4 @@
-import { Link, router, Stack } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import { useLogout } from '../../hooks/use-logout'
 import { useSession } from '../../hooks/use-session'
@@ -20,7 +20,6 @@ export default function Settings() {
       className="flex-1 bg-zinc-900"
       contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
-      <Stack.Screen options={{ title: 'Settings' }} />
       <Text className="text-2xl font-bold text-white">Settings</Text>
 
       {session ? (

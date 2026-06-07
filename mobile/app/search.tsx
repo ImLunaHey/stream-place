@@ -1,10 +1,10 @@
-import { Link, Stack } from 'expo-router'
+import { Link } from 'expo-router'
 import { useMemo, useState } from 'react'
 import { FlatList, Image, Pressable, Text, TextInput, View } from 'react-native'
-import { useDebounced } from '../../hooks/use-debounced'
-import { useLiveUsers } from '../../hooks/use-live-users'
-import { useProfilesByHandle } from '../../hooks/use-profiles-by-handle'
-import { useTypeahead } from '../../hooks/use-typeahead'
+import { useDebounced } from '../hooks/use-debounced'
+import { useLiveUsers } from '../hooks/use-live-users'
+import { useProfilesByHandle } from '../hooks/use-profiles-by-handle'
+import { useTypeahead } from '../hooks/use-typeahead'
 
 export default function Search() {
   const [query, setQuery] = useState('')
@@ -29,7 +29,6 @@ export default function Search() {
 
   return (
     <View className="flex-1 bg-zinc-900">
-      <Stack.Screen options={{ title: 'Search' }} />
       <View className="border-b border-white/5 bg-zinc-950 p-3">
         <TextInput
           value={query}

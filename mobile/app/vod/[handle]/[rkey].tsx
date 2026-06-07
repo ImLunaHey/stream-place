@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useVideoPlayer, VideoView } from 'expo-video'
 import { useMemo } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
@@ -27,7 +27,6 @@ export default function VodPage() {
 
   return (
     <>
-      <Stack.Screen options={{ title: video?.value.title ?? 'Video' }} />
       <ScrollView
         className="flex-1 bg-zinc-900"
         contentContainerStyle={{ paddingBottom: 32 }}

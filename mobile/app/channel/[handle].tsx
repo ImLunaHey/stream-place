@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import {
   Image,
@@ -115,7 +115,6 @@ export default function Channel() {
 
   return (
     <>
-      <Stack.Screen options={{ title: `@${handle}` }} />
       <View className="flex-1 bg-zinc-900">
         <ChannelPlayer handle={handle} stream={stream} />
 

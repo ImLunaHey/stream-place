@@ -7,9 +7,9 @@ import {
   View,
 } from 'react-native'
 import { useMemo } from 'react'
-import { StreamCard } from '../../components/stream-card'
-import { useLiveUsers } from '../../hooks/use-live-users'
-import { useProfilesByHandle } from '../../hooks/use-profiles-by-handle'
+import { StreamCard } from '../components/stream-card'
+import { useLiveUsers } from '../hooks/use-live-users'
+import { useProfilesByHandle } from '../hooks/use-profiles-by-handle'
 
 export default function Home() {
   const { data: streams = [], isLoading, refetch, isRefetching } =

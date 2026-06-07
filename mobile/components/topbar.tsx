@@ -2,9 +2,11 @@ import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import {
   Image,
+  Platform,
   Pressable,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native'
 import { useDebounced } from '../hooks/use-debounced'
@@ -13,29 +15,45 @@ import { useProfile } from '../hooks/use-profile'
 import { useSession } from '../hooks/use-session'
 import { useTypeahead } from '../hooks/use-typeahead'
 
-export function TopBar() {
+type Props = { mobile?: boolean }
+
+export function TopBar({ mobile }: Props) {
   const { session } = useSession()
   return (
     <View
-      className="h-14 shrink-0 flex-row items-center gap-4 border-b border-white/5 bg-zinc-950 px-6"
+      className={`h-14 shrink-0 flex-row items-center gap-3 border-b border-white/5 bg-zinc-950 ${
+        mobile ? 'px-3' : 'px-6 gap-4'
+      }`}
       style={{ zIndex: 30 }}
     >
       <Link href="/" asChild>
         <Pressable className="flex-row items-center gap-2">
           <Image
             source={require('../assets/icon.png')}
-            style={{ width: 24, height: 24, borderRadius: 4 }}
+            style={{ width: 26, height: 26, borderRadius: 4 }}
           />
-          <Text className="text-sm font-bold text-white">stream.place</Text>
+          {!mobile && (
+            <Text className="text-sm font-bold text-white">stream.place</Text>
+          )}
         </Pressable>
       </Link>
 
-      <View className="ml-4 max-w-md flex-1">
-        <TopbarSearch />
-      </View>
+      {!mobile && (
+        <View className="ml-4 max-w-md flex-1">
+          <TopbarSearch />
+        </View>
+      )}
 
-      <View className="ml-auto flex-row items-center gap-3">
-        {session ? <UserBadge /> : <LoginButton />}
+      {mobile && (
+        <Link href="/search" asChild>
+          <Pressable className="ml-auto h-9 w-9 items-center justify-center rounded-md bg-white/5">
+            <Text className="text-base text-zinc-300">🔍</Text>
+          </Pressable>
+        </Link>
+      )}
+
+      <View className={`flex-row items-center gap-3 ${mobile ? '' : 'ml-auto'}`}>
+        {session ? <UserBadge mobile={mobile} /> : <LoginButton />}
       </View>
     </View>
   )
@@ -51,7 +69,7 @@ function LoginButton() {
   )
 }
 
-function UserBadge() {
+function UserBadge({ mobile }: { mobile?: boolean }) {
   const { session } = useSession()
   const { data: profile } = useProfile(session?.handle)
   const logout = useLogout()
@@ -77,9 +95,11 @@ function UserBadge() {
           onPress={() => setOpen((v) => !v)}
           className="flex-row items-center gap-1 rounded-md px-2 py-1"
         >
-          <Text className="text-sm text-zinc-300">
-            {profile?.displayName ?? session.handle}
-          </Text>
+          {!mobile && (
+            <Text className="text-sm text-zinc-300">
+              {profile?.displayName ?? session.handle}
+            </Text>
+          )}
           <Text className="text-xs text-zinc-400">▾</Text>
         </Pressable>
       </View>
@@ -104,6 +124,15 @@ function UserBadge() {
             className="px-3 py-2"
           >
             <Text className="text-sm text-zinc-200">Settings</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              setOpen(false)
+              router.push('/go-live')
+            }}
+            className="border-t border-white/5 px-3 py-2"
+          >
+            <Text className="text-sm text-zinc-200">Go live</Text>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -153,16 +182,17 @@ function TopbarSearch() {
           style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
         >
           {actors.map((a) => (
-            <Link
+            <Pressable
               key={a.did}
-              href={`/channel/${a.handle}`}
-              asChild
-              onPress={() => setQuery('')}
+              onPress={() => {
+                setQuery('')
+                setFocused(false)
+                router.push(`/channel/${a.handle}`)
+              }}
+              className="border-b border-white/5 px-3 py-2"
             >
-              <Pressable className="border-b border-white/5 px-3 py-2">
-                <Text className="text-sm text-white">@{a.handle}</Text>
-              </Pressable>
-            </Link>
+              <Text className="text-sm text-white">@{a.handle}</Text>
+            </Pressable>
           ))}
         </View>
       )}

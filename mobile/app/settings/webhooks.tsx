@@ -1,4 +1,3 @@
-import { Stack } from 'expo-router'
 import { useState } from 'react'
 import {
   ActivityIndicator,
@@ -32,7 +31,6 @@ export default function WebhooksSettings() {
   if (!session) {
     return (
       <View className="flex-1 items-center justify-center bg-zinc-900">
-        <Stack.Screen options={{ title: 'Webhooks' }} />
         <Text className="text-sm text-zinc-400">
           Sign in to manage webhooks.
         </Text>
@@ -64,7 +62,6 @@ export default function WebhooksSettings() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Webhooks' }} />
       <ScrollView
         className="flex-1 bg-zinc-900"
         contentContainerStyle={{ padding: 16, paddingBottom: 32 }}

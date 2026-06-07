@@ -1,4 +1,4 @@
-import { router, Stack } from 'expo-router'
+import { router } from 'expo-router'
 import { useState } from 'react'
 import {
   ActivityIndicator,
@@ -41,7 +41,6 @@ export default function Login() {
       className="flex-1 bg-zinc-900"
       contentContainerStyle={{ padding: 24 }}
     >
-      <Stack.Screen options={{ title: 'Sign in' }} />
       <Text className="text-2xl font-bold text-white">Sign in with ATProto</Text>
       <Text className="mt-2 text-sm text-zinc-400">
         Enter your handle and an app password. We'll find your PDS

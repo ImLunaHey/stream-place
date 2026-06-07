@@ -1,4 +1,4 @@
-import { Link, Stack } from 'expo-router'
+import { Link } from 'expo-router'
 import { Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { useFavourites } from '../../hooks/use-favourites'
 
@@ -9,7 +9,6 @@ export default function Favourites() {
       className="flex-1 bg-zinc-900"
       contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
-      <Stack.Screen options={{ title: 'Favourites' }} />
       <Text className="text-xl font-bold text-white">Favourite channels</Text>
       {favourites.length === 0 ? (
         <Text className="mt-3 text-sm text-zinc-400">

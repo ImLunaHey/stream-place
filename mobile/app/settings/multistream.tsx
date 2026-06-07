@@ -1,4 +1,3 @@
-import { Stack } from 'expo-router'
 import { useState } from 'react'
 import {
   ActivityIndicator,
@@ -43,7 +42,6 @@ export default function MultistreamSettings() {
   if (!session) {
     return (
       <View className="flex-1 items-center justify-center bg-zinc-900">
-        <Stack.Screen options={{ title: 'Multistream' }} />
         <Text className="text-sm text-zinc-400">
           Sign in to manage multistream.
         </Text>
@@ -71,7 +69,6 @@ export default function MultistreamSettings() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Multistream' }} />
       <ScrollView
         className="flex-1 bg-zinc-900"
         contentContainerStyle={{ padding: 16, paddingBottom: 32 }}

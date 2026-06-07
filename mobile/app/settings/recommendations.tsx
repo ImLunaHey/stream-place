@@ -1,4 +1,3 @@
-import { Stack } from 'expo-router'
 import { useMemo, useState } from 'react'
 import {
   ActivityIndicator,
@@ -38,7 +37,6 @@ export default function RecommendationsSettings() {
   if (!session) {
     return (
       <View className="flex-1 items-center justify-center bg-zinc-900">
-        <Stack.Screen options={{ title: 'Recommends' }} />
         <Text className="text-sm text-zinc-400">
           Sign in to manage recommendations.
         </Text>
@@ -79,7 +77,6 @@ export default function RecommendationsSettings() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Recommends' }} />
       <ScrollView
         className="flex-1 bg-zinc-900"
         contentContainerStyle={{ padding: 16, paddingBottom: 32 }}

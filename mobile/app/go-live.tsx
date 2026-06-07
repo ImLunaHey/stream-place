@@ -1,5 +1,5 @@
 import * as Clipboard from 'expo-clipboard'
-import { router, Stack } from 'expo-router'
+import { router } from 'expo-router'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { SecretText } from '../components/secret-text'
@@ -15,7 +15,6 @@ export default function GoLive() {
   if (!session) {
     return (
       <View className="flex-1 items-center justify-center bg-zinc-900 p-6">
-        <Stack.Screen options={{ title: 'Go live' }} />
         <Text className="text-center text-base text-zinc-300">
           Sign in to go live.
         </Text>
@@ -34,7 +33,6 @@ export default function GoLive() {
       className="flex-1 bg-zinc-900"
       contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
-      <Stack.Screen options={{ title: 'Go live' }} />
       <Text className="text-2xl font-bold text-white">Go live</Text>
       <Text className="mt-1 text-sm text-zinc-400">
         Point your encoder at an ingest endpoint with a signing key.
