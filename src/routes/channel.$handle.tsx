@@ -119,7 +119,7 @@ function Channel() {
           type="button"
           onClick={() => setChatHidden(false)}
           aria-label="Show chat"
-          className="absolute right-3 top-16 z-30 hidden items-center gap-2 rounded-md bg-zinc-900/90 px-3 py-1.5 text-xs font-semibold text-zinc-200 ring-1 ring-white/10 backdrop-blur hover:bg-zinc-800 lg:flex"
+          className="fixed bottom-4 right-4 z-30 hidden items-center gap-2 rounded-md bg-zinc-900/90 px-3 py-1.5 text-xs font-semibold text-zinc-200 ring-1 ring-white/10 backdrop-blur hover:bg-zinc-800 lg:flex"
         >
           <PanelRightOpen className="h-4 w-4" /> Chat
         </button>

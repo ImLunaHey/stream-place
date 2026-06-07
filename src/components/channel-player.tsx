@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { LivestreamView, ResolvedProfile } from '../lib/streamplace'
 import { playlistUrl, thumbUrl } from '../lib/streamplace'
 import { safeViewName } from '../lib/format'
+import {
+  acknowledge,
+  hasAcknowledged,
+} from '../lib/content-warning-storage'
 import { useSegmentMeta } from '../hooks/use-segment-meta'
 import { ContentWarningOverlay } from './content-warning-overlay'
 import { VideoPlayer } from './video-player'
@@ -22,6 +26,16 @@ export function ChannelPlayer({ handle, stream, profile }: Props) {
 
   const meta = useSegmentMeta(handle)
   const [acknowledged, setAcknowledged] = useState(false)
+
+  useEffect(() => {
+    setAcknowledged(false)
+  }, [handle])
+
+  useEffect(() => {
+    if (meta.contentWarnings.length === 0) return
+    if (hasAcknowledged(handle, meta.contentWarnings)) setAcknowledged(true)
+  }, [handle, meta.contentWarnings])
+
   const showWarning =
     isLive && meta.contentWarnings.length > 0 && !acknowledged
 
@@ -64,7 +78,10 @@ export function ChannelPlayer({ handle, stream, profile }: Props) {
       {showWarning && (
         <ContentWarningOverlay
           warnings={meta.contentWarnings}
-          onAccept={() => setAcknowledged(true)}
+          onAccept={() => {
+            acknowledge(handle, meta.contentWarnings)
+            setAcknowledged(true)
+          }}
         />
       )}
     </div>
