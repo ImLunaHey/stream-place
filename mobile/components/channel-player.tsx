@@ -11,6 +11,7 @@ import {
   type LivestreamView,
 } from '../lib/streamplace'
 import { useSegmentMeta } from '../hooks/use-segment-meta'
+import { safeViewName, vtNameStyle } from '../lib/view-transition-style'
 import { ContentWarningOverlay } from './content-warning-overlay'
 import { Player } from './player'
 
@@ -60,7 +61,10 @@ export function ChannelPlayer({ handle, stream }: Props) {
   }
 
   return (
-    <View className="relative aspect-video w-full bg-black">
+    <View
+      className="relative aspect-video w-full bg-black"
+      style={vtNameStyle(`thumb-${safeViewName(handle)}`)}
+    >
       <Player
         src={src}
         poster={poster}

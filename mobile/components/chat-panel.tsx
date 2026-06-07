@@ -1,9 +1,11 @@
 import { router } from 'expo-router'
 import { Send } from 'lucide-react-native'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Platform,
   Pressable,
   Text,
@@ -29,17 +31,15 @@ const statusColour: Record<ChatStreamStatus, string> = {
   errored: '#f43f5e',
 }
 
+const PIN_THRESHOLD_PX = 40
+
 export function ChatPanel({ streamer, streamerDid, status }: Props) {
   const messages = useChatMessages(streamer)
   const { session } = useSession()
   const sendChat = useSendChat()
   const [text, setText] = useState('')
   const listRef = useRef<FlatList>(null)
-
-  useEffect(() => {
-    if (messages.length > 0)
-      listRef.current?.scrollToEnd({ animated: true })
-  }, [messages.length])
+  const pinnedToBottomRef = useRef(true)
 
   const onSend = () => {
     const trimmed = text.trim()
@@ -57,6 +57,18 @@ export function ChatPanel({ streamer, streamerDid, status }: Props) {
       e.preventDefault?.()
       onSend()
     }
+  }
+
+  const onContentSizeChange = () => {
+    if (!pinnedToBottomRef.current) return
+    listRef.current?.scrollToEnd({ animated: false })
+  }
+
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent
+    const distance =
+      contentSize.height - (contentOffset.y + layoutMeasurement.height)
+    pinnedToBottomRef.current = distance < PIN_THRESHOLD_PX
   }
 
   return (
@@ -79,6 +91,15 @@ export function ChatPanel({ streamer, streamerDid, status }: Props) {
         keyExtractor={(m) => m.uri}
         renderItem={({ item }) => <ChatMessageItem message={item} />}
         contentContainerStyle={{ paddingVertical: 8 }}
+        onContentSizeChange={onContentSizeChange}
+        onLayout={onContentSizeChange}
+        onScroll={onScroll}
+        scrollEventThrottle={100}
+        maintainVisibleContentPosition={
+          Platform.OS === 'web'
+            ? undefined
+            : { minIndexForVisible: 0, autoscrollToTopThreshold: undefined }
+        }
         ListEmptyComponent={
           <Text className="px-4 py-3 text-xs text-zinc-500">
             Waiting for chat messages…

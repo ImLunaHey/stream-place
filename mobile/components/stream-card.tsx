@@ -7,6 +7,7 @@ import {
   type ResolvedProfile,
 } from '../lib/streamplace'
 import { navigate } from '../lib/navigate'
+import { safeViewName, vtNameStyle } from '../lib/view-transition-style'
 
 type Props = {
   stream: LivestreamView
@@ -27,7 +28,10 @@ export function StreamCard({ stream, profile }: Props) {
       onPress={() => navigate(`/channel/${handle}`)}
       className="flex-col gap-2"
     >
-      <View className="relative aspect-video w-full overflow-hidden rounded-lg bg-zinc-800">
+      <View
+        className="relative aspect-video w-full overflow-hidden rounded-lg bg-zinc-800"
+        style={vtNameStyle(`thumb-${safeViewName(handle)}`)}
+      >
         {thumb ? (
           <Image source={{ uri: thumb }} className="h-full w-full" />
         ) : avatar ? (
