@@ -75,7 +75,13 @@ export default function Home() {
         )
       }
       renderItem={({ item }) => (
-        <View style={numColumns > 1 ? { flex: 1 } : undefined}>
+        <View
+          style={
+            numColumns > 1
+              ? { flex: 1, maxWidth: `${100 / numColumns}%` as any }
+              : undefined
+          }
+        >
           <StreamCard
             stream={item}
             profile={profiles.get(item.author.handle)}
