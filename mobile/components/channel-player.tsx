@@ -1,14 +1,18 @@
-import { useVideoPlayer, VideoView } from 'expo-video'
 import { useEffect, useState } from 'react'
-import { Platform, Text, useWindowDimensions, View } from 'react-native'
+import { Text, View } from 'react-native'
 import {
   acknowledge,
   hasAcknowledged,
 } from '../lib/content-warning-storage'
-import { playlistUrl, type LivestreamView } from '../lib/streamplace'
+import {
+  formatViewers,
+  playlistUrl,
+  thumbUrl,
+  type LivestreamView,
+} from '../lib/streamplace'
 import { useSegmentMeta } from '../hooks/use-segment-meta'
 import { ContentWarningOverlay } from './content-warning-overlay'
-import { PlayerOverlay } from './player-overlay'
+import { Player } from './player'
 
 type Props = {
   handle: string
@@ -19,8 +23,10 @@ export function ChannelPlayer({ handle, stream }: Props) {
   const isLive = !!stream
   const meta = useSegmentMeta(handle)
   const [acknowledged, setAcknowledged] = useState(false)
-  const { width } = useWindowDimensions()
-  const useCustomControls = Platform.OS === 'web' && width >= 1024
+
+  const poster = stream?.record.thumb
+    ? thumbUrl(stream.author.did, stream.record.thumb.ref.$link)
+    : undefined
 
   useEffect(() => setAcknowledged(false), [handle])
   useEffect(() => {
@@ -32,15 +38,7 @@ export function ChannelPlayer({ handle, stream }: Props) {
 
   const showWarning =
     isLive && meta.contentWarnings.length > 0 && !acknowledged
-
-  const player = useVideoPlayer(
-    isLive && !showWarning
-      ? { uri: playlistUrl(handle), contentType: 'hls' }
-      : null,
-    (p) => {
-      if (isLive && !showWarning) p.play()
-    },
-  )
+  const src = isLive && !showWarning ? playlistUrl(handle) : null
 
   if (!isLive) {
     return (
@@ -54,19 +52,29 @@ export function ChannelPlayer({ handle, stream }: Props) {
 
   return (
     <View className="relative aspect-video w-full bg-black">
-      <VideoView
-        player={player}
-        style={{ width: '100%', height: '100%' }}
-        nativeControls={!useCustomControls}
-        allowsFullscreen
-        allowsPictureInPicture
-      />
-      {useCustomControls && (
-        <PlayerOverlay
-          player={player}
-          live
-          viewerCount={stream?.viewerCount?.count}
-        />
+      <Player src={src} poster={poster} live />
+      {!showWarning && (
+        <View
+          pointerEvents="none"
+          className="absolute left-3 top-3 flex-row items-center gap-1.5 rounded bg-rose-600 px-2 py-1"
+          style={{ zIndex: 10 }}
+        >
+          <View className="h-1.5 w-1.5 rounded-full bg-white" />
+          <Text className="text-[11px] font-bold uppercase tracking-wider text-white">
+            Live
+          </Text>
+        </View>
+      )}
+      {!showWarning && stream?.viewerCount && (
+        <View
+          pointerEvents="none"
+          className="absolute right-3 top-3 rounded bg-black/70 px-2 py-1"
+          style={{ zIndex: 10 }}
+        >
+          <Text className="text-xs text-white">
+            {formatViewers(stream.viewerCount.count)} watching
+          </Text>
+        </View>
       )}
       {showWarning && (
         <ContentWarningOverlay

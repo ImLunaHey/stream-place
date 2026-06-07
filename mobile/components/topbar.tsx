@@ -1,12 +1,11 @@
-import { Link, router } from 'expo-router'
+import { router } from 'expo-router'
+import { ChevronDown, LogOut, RadioTower, Search, Settings } from 'lucide-react-native'
 import { useState } from 'react'
 import {
   Image,
-  Platform,
   Pressable,
   Text,
   TextInput,
-  useWindowDimensions,
   View,
 } from 'react-native'
 import { useDebounced } from '../hooks/use-debounced'
@@ -14,6 +13,7 @@ import { useLogout } from '../hooks/use-logout'
 import { useProfile } from '../hooks/use-profile'
 import { useSession } from '../hooks/use-session'
 import { useTypeahead } from '../hooks/use-typeahead'
+import { navigate } from '../lib/navigate'
 
 type Props = { mobile?: boolean }
 
@@ -22,21 +22,22 @@ export function TopBar({ mobile }: Props) {
   return (
     <View
       className={`h-14 shrink-0 flex-row items-center gap-3 border-b border-white/5 bg-zinc-950 ${
-        mobile ? 'px-3' : 'px-6 gap-4'
+        mobile ? 'px-3' : 'gap-4 px-6'
       }`}
       style={{ zIndex: 30 }}
     >
-      <Link href="/" asChild>
-        <Pressable className="flex-row items-center gap-2">
-          <Image
-            source={require('../assets/icon.png')}
-            style={{ width: 26, height: 26, borderRadius: 4 }}
-          />
-          {!mobile && (
-            <Text className="text-sm font-bold text-white">stream.place</Text>
-          )}
-        </Pressable>
-      </Link>
+      <Pressable
+        onPress={() => navigate('/')}
+        className="flex-row items-center gap-2"
+      >
+        <Image
+          source={require('../assets/icon.png')}
+          style={{ width: 26, height: 26, borderRadius: 4 }}
+        />
+        {!mobile && (
+          <Text className="text-sm font-bold text-white">stream.place</Text>
+        )}
+      </Pressable>
 
       {!mobile && (
         <View className="ml-4 max-w-md flex-1">
@@ -45,14 +46,17 @@ export function TopBar({ mobile }: Props) {
       )}
 
       {mobile && (
-        <Link href="/search" asChild>
-          <Pressable className="ml-auto h-9 w-9 items-center justify-center rounded-md bg-white/5">
-            <Text className="text-base text-zinc-300">🔍</Text>
-          </Pressable>
-        </Link>
+        <Pressable
+          onPress={() => navigate('/search')}
+          className="ml-auto h-9 w-9 items-center justify-center rounded-md bg-white/5"
+        >
+          <Search size={16} color="#d4d4d8" />
+        </Pressable>
       )}
 
-      <View className={`flex-row items-center gap-3 ${mobile ? '' : 'ml-auto'}`}>
+      <View
+        className={`flex-row items-center gap-3 ${mobile ? '' : 'ml-auto'}`}
+      >
         {session ? <UserBadge mobile={mobile} /> : <LoginButton />}
       </View>
     </View>
@@ -61,11 +65,12 @@ export function TopBar({ mobile }: Props) {
 
 function LoginButton() {
   return (
-    <Link href="/login" asChild>
-      <Pressable className="rounded-md bg-violet-500 px-3 py-1.5">
-        <Text className="text-sm font-semibold text-white">Log in</Text>
-      </Pressable>
-    </Link>
+    <Pressable
+      onPress={() => navigate('/login')}
+      className="rounded-md bg-violet-500 px-3 py-1.5"
+    >
+      <Text className="text-sm font-semibold text-white">Log in</Text>
+    </Pressable>
   )
 }
 
@@ -78,19 +83,20 @@ function UserBadge({ mobile }: { mobile?: boolean }) {
   return (
     <View>
       <View className="flex-row items-center gap-1">
-        <Link href={`/channel/${session.handle}`} asChild>
-          <Pressable className="h-8 w-8 overflow-hidden rounded-full">
-            {profile?.avatar ? (
-              <Image source={{ uri: profile.avatar }} className="h-full w-full" />
-            ) : (
-              <View className="h-full w-full items-center justify-center bg-violet-500/30">
-                <Text className="text-xs font-semibold text-violet-100">
-                  {session.handle[0]?.toUpperCase()}
-                </Text>
-              </View>
-            )}
-          </Pressable>
-        </Link>
+        <Pressable
+          onPress={() => navigate(`/channel/${session.handle}`)}
+          className="h-8 w-8 overflow-hidden rounded-full"
+        >
+          {profile?.avatar ? (
+            <Image source={{ uri: profile.avatar }} className="h-full w-full" />
+          ) : (
+            <View className="h-full w-full items-center justify-center bg-violet-500/30">
+              <Text className="text-xs font-semibold text-violet-100">
+                {session.handle[0]?.toUpperCase()}
+              </Text>
+            </View>
+          )}
+        </Pressable>
         <Pressable
           onPress={() => setOpen((v) => !v)}
           className="flex-row items-center gap-1 rounded-md px-2 py-1"
@@ -100,7 +106,7 @@ function UserBadge({ mobile }: { mobile?: boolean }) {
               {profile?.displayName ?? session.handle}
             </Text>
           )}
-          <Text className="text-xs text-zinc-400">▾</Text>
+          <ChevronDown size={14} color="#a1a1aa" />
         </Pressable>
       </View>
       {open && (
@@ -119,19 +125,21 @@ function UserBadge({ mobile }: { mobile?: boolean }) {
           <Pressable
             onPress={() => {
               setOpen(false)
-              router.push('/settings')
+              navigate('/settings')
             }}
-            className="px-3 py-2"
+            className="flex-row items-center gap-2 px-3 py-2"
           >
+            <Settings size={14} color="#e4e4e7" />
             <Text className="text-sm text-zinc-200">Settings</Text>
           </Pressable>
           <Pressable
             onPress={() => {
               setOpen(false)
-              router.push('/go-live')
+              navigate('/go-live')
             }}
-            className="border-t border-white/5 px-3 py-2"
+            className="flex-row items-center gap-2 border-t border-white/5 px-3 py-2"
           >
+            <RadioTower size={14} color="#e4e4e7" />
             <Text className="text-sm text-zinc-200">Go live</Text>
           </Pressable>
           <Pressable
@@ -141,8 +149,9 @@ function UserBadge({ mobile }: { mobile?: boolean }) {
                 onSuccess: () => router.replace('/'),
               })
             }}
-            className="border-t border-white/5 px-3 py-2"
+            className="flex-row items-center gap-2 border-t border-white/5 px-3 py-2"
           >
+            <LogOut size={14} color="#fda4af" />
             <Text className="text-sm text-rose-300">Log out</Text>
           </Pressable>
         </View>
@@ -161,14 +170,14 @@ function TopbarSearch() {
   return (
     <View style={{ position: 'relative' }}>
       <View className="flex-row items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5">
-        <Text className="text-zinc-500">🔍</Text>
+        <Search size={14} color="#71717a" />
         <TextInput
           value={query}
           onChangeText={setQuery}
           onFocus={() => setFocused(true)}
           onBlur={() => setTimeout(() => setFocused(false), 150)}
           onSubmitEditing={() => {
-            router.push(`/search`)
+            navigate(`/search`)
             setQuery('')
           }}
           placeholder="Search channels"
@@ -187,7 +196,7 @@ function TopbarSearch() {
               onPress={() => {
                 setQuery('')
                 setFocused(false)
-                router.push(`/channel/${a.handle}`)
+                navigate(`/channel/${a.handle}`)
               }}
               className="border-b border-white/5 px-3 py-2"
             >

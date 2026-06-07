@@ -1,4 +1,5 @@
 import { router, usePathname } from 'expo-router'
+import { ChevronLeft } from 'lucide-react-native'
 import type { ReactNode } from 'react'
 import {
   Platform,
@@ -44,8 +45,12 @@ export function AppShell({ children }: Props) {
       <TopBar mobile />
       {showMobileBack && !isChannel && (
         <View className="flex-row items-center gap-2 border-b border-white/5 bg-zinc-950 px-3 py-2">
-          <Pressable onPress={() => router.back()} className="rounded-md px-2 py-1">
-            <Text className="text-sm text-zinc-200">‹ Back</Text>
+          <Pressable
+            onPress={() => router.back()}
+            className="flex-row items-center gap-1 rounded-md px-2 py-1"
+          >
+            <ChevronLeft size={16} color="#e4e4e7" />
+            <Text className="text-sm text-zinc-200">Back</Text>
           </Pressable>
         </View>
       )}
