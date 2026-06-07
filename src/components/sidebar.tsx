@@ -86,9 +86,16 @@ export function Sidebar({ className }: Props) {
             <LogIn className="h-5 w-5" />
           </IconButton>
         )}
-        <IconButton to="/about" label="About" active={path === '/about'}>
+        <a
+          href="https://stream.place/docs"
+          target="_blank"
+          rel="noreferrer"
+          title="Docs"
+          aria-label="Docs"
+          className="group relative flex h-11 w-11 items-center justify-center rounded-xl text-zinc-400 transition hover:bg-white/5 hover:text-white"
+        >
           <HelpCircle className="h-5 w-5" />
-        </IconButton>
+        </a>
       </div>
     </aside>
   )

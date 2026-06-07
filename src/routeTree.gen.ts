@@ -13,7 +13,6 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GoLiveRouteImport } from './routes/go-live'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsWebhooksRouteImport } from './routes/settings.webhooks'
@@ -41,11 +40,6 @@ const LoginRoute = LoginRouteImport.update({
 const GoLiveRoute = GoLiveRouteImport.update({
   id: '/go-live',
   path: '/go-live',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -91,7 +85,6 @@ const ChannelHandleRoute = ChannelHandleRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/go-live': typeof GoLiveRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -106,7 +99,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/go-live': typeof GoLiveRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -121,7 +113,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/go-live': typeof GoLiveRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
@@ -138,7 +129,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/go-live'
     | '/login'
     | '/search'
@@ -153,7 +143,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/go-live'
     | '/login'
     | '/search'
@@ -167,7 +156,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/go-live'
     | '/login'
     | '/search'
@@ -183,7 +171,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   GoLiveRoute: typeof GoLiveRoute
   LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
@@ -219,13 +206,6 @@ declare module '@tanstack/react-router' {
       path: '/go-live'
       fullPath: '/go-live'
       preLoaderRoute: typeof GoLiveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -311,7 +291,6 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   GoLiveRoute: GoLiveRoute,
   LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
