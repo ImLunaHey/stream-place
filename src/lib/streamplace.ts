@@ -1,4 +1,5 @@
 import { getAuthedAgent } from './atp'
+import { resolvePdsForIdentifier } from './resolve-pds'
 
 export const STREAMPLACE_HOST = 'https://stream.place'
 
@@ -111,6 +112,51 @@ export function playlistUrl(streamer: string): string {
   )
   url.searchParams.set('streamer', streamer)
   return url.toString()
+}
+
+export function videoPlaylistUrl(uri: string): string {
+  const url = new URL(
+    `${STREAMPLACE_HOST}/xrpc/place.stream.playback.getVideoPlaylist`,
+  )
+  url.searchParams.set('uri', uri)
+  return url.toString()
+}
+
+export type VideoRecord = {
+  $type?: 'place.stream.video'
+  title: string
+  createdAt: string
+  description?: string
+  durationMs: number
+  thumb?: {
+    $type: 'blob'
+    ref: { $link: string }
+    mimeType: string
+    size: number
+  }
+  tags?: string[]
+  activity?: unknown
+}
+
+export type VideoRecordView = {
+  uri: string
+  cid: string
+  value: VideoRecord
+}
+
+export async function listUserVideos(
+  did: string,
+  limit = 50,
+): Promise<VideoRecordView[]> {
+  const { pds } = await resolvePdsForIdentifier(did)
+  const url = new URL(`${pds}/xrpc/com.atproto.repo.listRecords`)
+  url.searchParams.set('repo', did)
+  url.searchParams.set('collection', 'place.stream.video')
+  url.searchParams.set('limit', String(limit))
+  const res = await fetch(url, { headers: { accept: 'application/json' } })
+  if (!res.ok) throw new Error(`listUserVideos failed: ${res.status}`)
+  const data = (await res.json()) as { records?: VideoRecordView[] }
+  return data.records ?? []
 }
 
 export function chatWebSocketUrl(streamer: string): string {

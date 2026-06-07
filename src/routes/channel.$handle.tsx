@@ -6,6 +6,7 @@ import { ChannelHeader } from '../components/channel-header'
 import { ChannelPlayer } from '../components/channel-player'
 import { ChannelTopStrip } from '../components/channel-top-strip'
 import { ChatPanel } from '../components/chat/chat-panel'
+import { UserVods } from '../components/user-vods'
 import {
   MobileChannelTabs,
   type MobileTab,
@@ -46,6 +47,7 @@ function Channel() {
           {profile.description}
         </p>
       )}
+      <UserVods handle={handle} did={profile?.did} />
     </>
   )
 

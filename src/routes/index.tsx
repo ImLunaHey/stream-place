@@ -21,7 +21,10 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const { data: streams } = useLiveUsers(50)
-  const handles = streams.map((s) => s.author.handle)
+  const sortedStreams = [...streams].sort(
+    (a, b) => (b.viewerCount?.count ?? 0) - (a.viewerCount?.count ?? 0),
+  )
+  const handles = sortedStreams.map((s) => s.author.handle)
   const profiles = useProfilesByHandle(handles)
 
   return (
@@ -31,11 +34,11 @@ function Home() {
           <h1 className="text-2xl font-bold tracking-tight">Live now</h1>
           <span className="text-sm text-zinc-500">{streams.length} streaming</span>
         </header>
-        {streams.length === 0 ? (
+        {sortedStreams.length === 0 ? (
           <p className="text-sm text-zinc-400">No streams live right now.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {streams.map((s) => (
+            {sortedStreams.map((s) => (
               <StreamCard
                 key={s.uri}
                 stream={s}

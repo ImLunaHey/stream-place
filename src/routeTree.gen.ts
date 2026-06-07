@@ -21,6 +21,7 @@ import { Route as SettingsProfileRouteImport } from './routes/settings.profile'
 import { Route as SettingsMultistreamRouteImport } from './routes/settings.multistream'
 import { Route as SettingsFavouritesRouteImport } from './routes/settings.favourites'
 import { Route as ChannelHandleRouteImport } from './routes/channel.$handle'
+import { Route as VodHandleRkeyRouteImport } from './routes/vod.$handle.$rkey'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -82,6 +83,11 @@ const ChannelHandleRoute = ChannelHandleRouteImport.update({
   path: '/channel/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VodHandleRkeyRoute = VodHandleRkeyRouteImport.update({
+  id: '/vod/$handle/$rkey',
+  path: '/vod/$handle/$rkey',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/settings/recommendations': typeof SettingsRecommendationsRoute
   '/settings/webhooks': typeof SettingsWebhooksRoute
   '/settings/': typeof SettingsIndexRoute
+  '/vod/$handle/$rkey': typeof VodHandleRkeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/settings/recommendations': typeof SettingsRecommendationsRoute
   '/settings/webhooks': typeof SettingsWebhooksRoute
   '/settings': typeof SettingsIndexRoute
+  '/vod/$handle/$rkey': typeof VodHandleRkeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/settings/recommendations': typeof SettingsRecommendationsRoute
   '/settings/webhooks': typeof SettingsWebhooksRoute
   '/settings/': typeof SettingsIndexRoute
+  '/vod/$handle/$rkey': typeof VodHandleRkeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/settings/recommendations'
     | '/settings/webhooks'
     | '/settings/'
+    | '/vod/$handle/$rkey'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/settings/recommendations'
     | '/settings/webhooks'
     | '/settings'
+    | '/vod/$handle/$rkey'
   id:
     | '__root__'
     | '/'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/settings/recommendations'
     | '/settings/webhooks'
     | '/settings/'
+    | '/vod/$handle/$rkey'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   ChannelHandleRoute: typeof ChannelHandleRoute
+  VodHandleRkeyRoute: typeof VodHandleRkeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -264,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChannelHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vod/$handle/$rkey': {
+      id: '/vod/$handle/$rkey'
+      path: '/vod/$handle/$rkey'
+      fullPath: '/vod/$handle/$rkey'
+      preLoaderRoute: typeof VodHandleRkeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -296,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRouteWithChildren,
   ChannelHandleRoute: ChannelHandleRoute,
+  VodHandleRkeyRoute: VodHandleRkeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
