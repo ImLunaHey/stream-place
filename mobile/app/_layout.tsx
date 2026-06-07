@@ -20,10 +20,32 @@ export default function RootLayout() {
               contentStyle: { backgroundColor: '#18181b' },
             }}
           >
-            <Stack.Screen name="index" options={{ title: 'stream.place' }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
               name="channel/[handle]"
               options={{ title: 'Channel', headerBackTitle: 'Back' }}
+            />
+            <Stack.Screen
+              name="vod/[handle]/[rkey]"
+              options={{ title: 'Video', headerBackTitle: 'Back' }}
+            />
+            <Stack.Screen name="login" options={{ title: 'Sign in' }} />
+            <Stack.Screen name="go-live" options={{ title: 'Go live' }} />
+            <Stack.Screen
+              name="settings/multistream"
+              options={{ title: 'Multistream' }}
+            />
+            <Stack.Screen
+              name="settings/webhooks"
+              options={{ title: 'Webhooks' }}
+            />
+            <Stack.Screen
+              name="settings/recommendations"
+              options={{ title: 'Recommends' }}
+            />
+            <Stack.Screen
+              name="settings/favourites"
+              options={{ title: 'Favourites' }}
             />
           </Stack>
         </QueryClientProvider>
