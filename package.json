@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "build": "vite build",
+    "build": "cd mobile && npm ci --legacy-peer-deps && EXPO_PUBLIC_GIT_SHA=$(git rev-parse --short HEAD 2>/dev/null || echo dev) npx expo export --platform web --output-dir ../dist",
+    "build:web": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "biome format",
