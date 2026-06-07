@@ -8,6 +8,8 @@ export type PlayerState = {
   fullscreen: boolean
   behindLive: boolean
   liveLagSeconds: number
+  currentTime: number
+  duration: number
 }
 
 const LIVE_TOLERANCE_SECONDS = 4
@@ -23,6 +25,8 @@ export function usePlayerState(
   const [fullscreen, setFullscreen] = useState(false)
   const [behindLive, setBehindLive] = useState(false)
   const [liveLagSeconds, setLiveLagSeconds] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
 
   useEffect(() => {
     const v = videoRef.current
@@ -33,14 +37,25 @@ export function usePlayerState(
       setMuted(v.muted)
       setVolume(v.volume)
     }
+    const onTime = () => setCurrentTime(v.currentTime)
+    const onDuration = () => {
+      setDuration(Number.isFinite(v.duration) ? v.duration : 0)
+    }
     v.addEventListener('play', onPlay)
     v.addEventListener('pause', onPause)
     v.addEventListener('volumechange', onVol)
+    v.addEventListener('timeupdate', onTime)
+    v.addEventListener('durationchange', onDuration)
+    v.addEventListener('loadedmetadata', onDuration)
     onVol()
+    onDuration()
     return () => {
       v.removeEventListener('play', onPlay)
       v.removeEventListener('pause', onPause)
       v.removeEventListener('volumechange', onVol)
+      v.removeEventListener('timeupdate', onTime)
+      v.removeEventListener('durationchange', onDuration)
+      v.removeEventListener('loadedmetadata', onDuration)
     }
   }, [videoRef])
 
@@ -69,5 +84,14 @@ export function usePlayerState(
     return () => window.clearInterval(id)
   }, [videoRef, getLiveEdge])
 
-  return { playing, muted, volume, fullscreen, behindLive, liveLagSeconds }
+  return {
+    playing,
+    muted,
+    volume,
+    fullscreen,
+    behindLive,
+    liveLagSeconds,
+    currentTime,
+    duration,
+  }
 }

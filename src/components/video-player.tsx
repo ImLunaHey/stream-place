@@ -8,6 +8,7 @@ type Props = {
   src: string
   poster?: string
   viewerCount?: number
+  live?: boolean
   className?: string
   onReportStream?: () => void
   onReportUser?: () => void
@@ -17,13 +18,14 @@ export function VideoPlayer({
   src,
   poster,
   viewerCount,
+  live = true,
   className,
   onReportStream,
   onReportUser,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [lowLatency, setLowLatency] = useState(true)
+  const [lowLatency, setLowLatency] = useState(live)
   const {
     error,
     seekToLive,
@@ -32,7 +34,7 @@ export function VideoPlayer({
     currentLevel,
     setLevel,
     getStats,
-  } = useHls(videoRef, src, { lowLatency })
+  } = useHls(videoRef, src, { lowLatency: live && lowLatency })
   const state = usePlayerState(videoRef, containerRef, getLiveEdge)
 
   const [controlsVisible, setControlsVisible] = useState(true)
@@ -79,6 +81,12 @@ export function VideoPlayer({
     else el.requestFullscreen().catch(() => {})
   }
 
+  const seek = (time: number) => {
+    const v = videoRef.current
+    if (!v) return
+    v.currentTime = time
+  }
+
   return (
     <div
       ref={containerRef}
@@ -89,9 +97,9 @@ export function VideoPlayer({
       <video
         ref={videoRef}
         poster={poster}
-        autoPlay
+        autoPlay={live}
         playsInline
-        muted
+        muted={live}
         onClick={togglePlay}
         className="h-full w-full cursor-pointer bg-black"
       />
@@ -105,12 +113,15 @@ export function VideoPlayer({
 
       <PlayerControls
         visible={controlsVisible || !state.playing}
+        live={live}
         playing={state.playing}
         muted={state.muted}
         volume={state.volume}
         fullscreen={state.fullscreen}
         behindLive={state.behindLive}
         liveLagSeconds={state.liveLagSeconds}
+        currentTime={state.currentTime}
+        duration={state.duration}
         viewerCount={viewerCount}
         levels={levels}
         currentLevel={currentLevel}
@@ -121,6 +132,7 @@ export function VideoPlayer({
         onVolumeChange={setVolume}
         onToggleFullscreen={toggleFullscreen}
         onGoLive={seekToLive}
+        onSeek={seek}
         onSetLevel={setLevel}
         onToggleLowLatency={() => setLowLatency((v) => !v)}
         onToggleDebug={() => setShowDebug((v) => !v)}

@@ -1,5 +1,4 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ChevronLeft } from 'lucide-react'
 import { useMemo } from 'react'
 import { Boundary } from '../components/boundary'
 import { VideoPlayer } from '../components/video-player'
@@ -33,29 +32,20 @@ function VodPage() {
     return videos.find((v) => v.uri === target)
   }, [videos, did, rkey])
 
-  const src = did ? videoPlaylistUrl(`at://${did}/place.stream.video/${rkey}`) : null
+  const src = did
+    ? videoPlaylistUrl(`at://${did}/place.stream.video/${rkey}`)
+    : null
   // biome-ignore lint: dynamic record activity shape
   const activity = formatActivity((video?.value as any)?.activity)
   const tags = formatTags(video?.value.tags)
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col overflow-y-auto">
-      <div className="border-b border-white/5 bg-zinc-950 px-3 py-2 lg:px-6">
-        <Link
-          to="/channel/$handle"
-          params={{ handle }}
-          viewTransition
-          className="inline-flex items-center gap-1 text-sm text-zinc-300 hover:text-white"
-        >
-          <ChevronLeft className="h-4 w-4" /> Back to @{handle}
-        </Link>
-      </div>
-
       <div className="shrink-0 bg-black">
         {src ? (
           <div className="relative aspect-video w-full overflow-hidden">
             <Boundary id="vod-player" title="Player crashed">
-              <VideoPlayer src={src} className="h-full w-full" />
+              <VideoPlayer src={src} live={false} className="h-full w-full" />
             </Boundary>
           </div>
         ) : (
@@ -71,11 +61,31 @@ function VodPage() {
             <h1 className="text-xl font-bold tracking-tight">
               {video.value.title}
             </h1>
-            <p className="mt-1 text-sm text-zinc-400">
-              {profile?.displayName ?? handle}{' '}
-              <span className="text-zinc-500">· @{handle}</span>
-            </p>
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
+            <Link
+              to="/channel/$handle"
+              params={{ handle }}
+              viewTransition
+              className="mt-3 flex items-center gap-3 text-sm"
+            >
+              {profile?.avatar ? (
+                <img
+                  src={profile.avatar}
+                  alt=""
+                  className="h-10 w-10 shrink-0 rounded-full ring-1 ring-white/10"
+                />
+              ) : (
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-zinc-800 text-sm font-semibold ring-1 ring-white/10">
+                  {handle[0]?.toUpperCase()}
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-white hover:text-violet-300">
+                  {profile?.displayName ?? handle}
+                </p>
+                <p className="truncate text-xs text-zinc-500">@{handle}</p>
+              </div>
+            </Link>
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
               <span>{formatDuration(video.value.durationMs)}</span>
               <span>·</span>
               <span>{new Date(video.value.createdAt).toLocaleDateString()}</span>
