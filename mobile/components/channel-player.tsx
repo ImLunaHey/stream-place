@@ -1,17 +1,14 @@
 import { useVideoPlayer, VideoView } from 'expo-video'
 import { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { Platform, Text, useWindowDimensions, View } from 'react-native'
 import {
   acknowledge,
   hasAcknowledged,
 } from '../lib/content-warning-storage'
-import {
-  formatViewers,
-  playlistUrl,
-  type LivestreamView,
-} from '../lib/streamplace'
+import { playlistUrl, type LivestreamView } from '../lib/streamplace'
 import { useSegmentMeta } from '../hooks/use-segment-meta'
 import { ContentWarningOverlay } from './content-warning-overlay'
+import { PlayerOverlay } from './player-overlay'
 
 type Props = {
   handle: string
@@ -22,11 +19,10 @@ export function ChannelPlayer({ handle, stream }: Props) {
   const isLive = !!stream
   const meta = useSegmentMeta(handle)
   const [acknowledged, setAcknowledged] = useState(false)
+  const { width } = useWindowDimensions()
+  const useCustomControls = Platform.OS === 'web' && width >= 1024
 
-  useEffect(() => {
-    setAcknowledged(false)
-  }, [handle])
-
+  useEffect(() => setAcknowledged(false), [handle])
   useEffect(() => {
     if (meta.contentWarnings.length === 0) return
     void hasAcknowledged(handle, meta.contentWarnings).then((ok) => {
@@ -61,28 +57,16 @@ export function ChannelPlayer({ handle, stream }: Props) {
       <VideoView
         player={player}
         style={{ width: '100%', height: '100%' }}
-        nativeControls
+        nativeControls={!useCustomControls}
         allowsFullscreen
         allowsPictureInPicture
       />
-      <View
-        pointerEvents="none"
-        className="absolute left-3 top-3 flex-row items-center gap-1.5 rounded bg-rose-600 px-2 py-1"
-      >
-        <View className="h-1.5 w-1.5 rounded-full bg-white" />
-        <Text className="text-[11px] font-bold uppercase tracking-wider text-white">
-          Live
-        </Text>
-      </View>
-      {stream?.viewerCount && (
-        <View
-          pointerEvents="none"
-          className="absolute right-3 top-3 rounded bg-black/70 px-2 py-1"
-        >
-          <Text className="text-xs text-white">
-            {formatViewers(stream.viewerCount.count)} watching
-          </Text>
-        </View>
+      {useCustomControls && (
+        <PlayerOverlay
+          player={player}
+          live
+          viewerCount={stream?.viewerCount?.count}
+        />
       )}
       {showWarning && (
         <ContentWarningOverlay

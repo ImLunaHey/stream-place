@@ -1,4 +1,11 @@
-import { FlatList, RefreshControl, Text, View } from 'react-native'
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native'
 import { useMemo } from 'react'
 import { StreamCard } from '../../components/stream-card'
 import { useLiveUsers } from '../../hooks/use-live-users'
@@ -18,11 +25,29 @@ export default function Home() {
   const handles = useMemo(() => sorted.map((s) => s.author.handle), [sorted])
   const profiles = useProfilesByHandle(handles)
 
+  const { width } = useWindowDimensions()
+  const isDesktop = Platform.OS === 'web' && width >= 1024
+  const numColumns = isDesktop
+    ? width >= 1536
+      ? 4
+      : width >= 1280
+      ? 3
+      : 2
+    : 1
+
   return (
     <FlatList
+      key={`cols-${numColumns}`}
       data={sorted}
       keyExtractor={(s) => s.uri}
-      contentContainerStyle={{ padding: 12, gap: 16 }}
+      numColumns={numColumns}
+      columnWrapperStyle={numColumns > 1 ? { gap: 16 } : undefined}
+      contentContainerStyle={{
+        padding: isDesktop ? 24 : 12,
+        gap: 16,
+        maxWidth: 1400,
+        ...(isDesktop ? { marginHorizontal: 'auto', width: '100%' as any } : {}),
+      }}
       refreshControl={
         <RefreshControl
           refreshing={isRefetching}
@@ -50,7 +75,12 @@ export default function Home() {
         )
       }
       renderItem={({ item }) => (
-        <StreamCard stream={item} profile={profiles.get(item.author.handle)} />
+        <View style={numColumns > 1 ? { flex: 1 } : undefined}>
+          <StreamCard
+            stream={item}
+            profile={profiles.get(item.author.handle)}
+          />
+        </View>
       )}
     />
   )

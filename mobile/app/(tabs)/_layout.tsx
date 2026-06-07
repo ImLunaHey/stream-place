@@ -1,12 +1,19 @@
 import { Tabs } from 'expo-router'
+import { Platform, useWindowDimensions } from 'react-native'
 
 export default function TabsLayout() {
+  const { width } = useWindowDimensions()
+  const isDesktop = Platform.OS === 'web' && width >= 1024
+
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { backgroundColor: '#0a0a0a', borderTopColor: '#27272a' },
+        tabBarStyle: isDesktop
+          ? { display: 'none' }
+          : { backgroundColor: '#0a0a0a', borderTopColor: '#27272a' },
         tabBarActiveTintColor: '#a78bfa',
         tabBarInactiveTintColor: '#71717a',
+        headerShown: !isDesktop,
         headerStyle: { backgroundColor: '#0a0a0a' },
         headerTintColor: '#f4f4f5',
       }}
