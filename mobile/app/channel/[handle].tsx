@@ -128,7 +128,7 @@ export default function Channel() {
                 className="flex-1 items-center py-3"
                 style={{
                   borderBottomWidth: 2,
-                  borderBottomColor: active ? '#a78bfa' : 'transparent',
+                  borderBottomColor: active ? '#f472b6' : 'transparent',
                 }}
               >
                 <Text

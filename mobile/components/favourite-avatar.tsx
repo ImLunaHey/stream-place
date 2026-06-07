@@ -22,12 +22,12 @@ export function FavouriteAvatar({
       className="relative h-11 w-11 items-center justify-center rounded-xl bg-zinc-800"
       style={{
         borderWidth: live ? 2 : 1,
-        borderColor: live ? '#f43f5e' : active ? '#a78bfa' : 'rgba(255,255,255,0.05)',
+        borderColor: live ? '#f43f5e' : active ? '#f472b6' : 'rgba(255,255,255,0.05)',
       }}
     >
       {active && (
         <View
-          className="absolute h-6 w-1 rounded-r-full bg-violet-400"
+          className="absolute h-6 w-1 rounded-r-full bg-pink-400"
           style={{ left: -8, top: '50%', transform: [{ translateY: -12 }] }}
         />
       )}

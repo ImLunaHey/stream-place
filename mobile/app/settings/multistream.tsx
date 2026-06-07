@@ -88,7 +88,7 @@ export default function MultistreamSettings() {
               createMut.reset()
               setFormOpen(true)
             }}
-            className="rounded-md bg-violet-500 px-3 py-2"
+            className="rounded-md bg-pink-500 px-3 py-2"
           >
             <Text className="text-sm font-semibold text-white">+ New</Text>
           </Pressable>

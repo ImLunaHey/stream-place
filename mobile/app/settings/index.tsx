@@ -47,7 +47,7 @@ export default function Settings() {
           <Text className="text-sm text-zinc-300">Not signed in.</Text>
           <Pressable
             onPress={() => router.push('/login')}
-            className="mt-3 self-start rounded-md bg-violet-500 px-3 py-2"
+            className="mt-3 self-start rounded-md bg-pink-500 px-3 py-2"
           >
             <Text className="text-sm font-semibold text-white">Sign in</Text>
           </Pressable>

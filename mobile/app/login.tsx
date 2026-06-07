@@ -28,7 +28,7 @@ export default function Login() {
         </Text>
         <Pressable
           onPress={() => router.replace('/')}
-          className="mt-4 rounded-md bg-violet-500 px-4 py-2"
+          className="mt-4 rounded-md bg-pink-500 px-4 py-2"
         >
           <Text className="text-sm font-semibold text-white">Go home</Text>
         </Pressable>
@@ -89,7 +89,7 @@ export default function Login() {
             )
           }
           disabled={loginMut.isPending}
-          className="mt-2 flex-row items-center justify-center gap-2 rounded-md bg-violet-500 px-4 py-3"
+          className="mt-2 flex-row items-center justify-center gap-2 rounded-md bg-pink-500 px-4 py-3"
           style={{ opacity: loginMut.isPending ? 0.6 : 1 }}
         >
           {loginMut.isPending && <ActivityIndicator color="#fff" size="small" />}

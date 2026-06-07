@@ -133,7 +133,7 @@ export function MultistreamFormModal({
             <Pressable
               onPress={submit}
               disabled={isLoading}
-              className="flex-row items-center gap-2 rounded-md bg-violet-500 px-4 py-2"
+              className="flex-row items-center gap-2 rounded-md bg-pink-500 px-4 py-2"
               style={{ opacity: isLoading ? 0.6 : 1 }}
             >
               {isLoading && <ActivityIndicator color="#fff" size="small" />}

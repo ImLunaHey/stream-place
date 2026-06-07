@@ -28,7 +28,7 @@ export function FollowButton({ profile }: { profile: ProfileWithViewer }) {
       onPress={onPress}
       disabled={pending}
       className={`flex-row items-center gap-2 rounded-md px-3 py-2 ${
-        isFollowing ? 'bg-white/5' : 'bg-violet-500'
+        isFollowing ? 'bg-white/5' : 'bg-pink-500'
       }`}
       style={{ opacity: pending ? 0.6 : 1 }}
     >

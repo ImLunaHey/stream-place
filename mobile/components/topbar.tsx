@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
 } from 'react-native'
+import { BrandLogo } from './brand-logo'
 import { useDebounced } from '../hooks/use-debounced'
 import { useLogout } from '../hooks/use-logout'
 import { useProfile } from '../hooks/use-profile'
@@ -30,10 +31,7 @@ export function TopBar({ mobile }: Props) {
         onPress={() => navigate('/')}
         className="flex-row items-center gap-2"
       >
-        <Image
-          source={require('../assets/icon.png')}
-          style={{ width: 26, height: 26, borderRadius: 4 }}
-        />
+        <BrandLogo size={28} />
         {!mobile && (
           <Text className="text-sm font-bold text-white">stream.place</Text>
         )}
@@ -67,7 +65,7 @@ function LoginButton() {
   return (
     <Pressable
       onPress={() => navigate('/login')}
-      className="rounded-md bg-violet-500 px-3 py-1.5"
+      className="rounded-md bg-pink-500 px-3 py-1.5"
     >
       <Text className="text-sm font-semibold text-white">Log in</Text>
     </Pressable>
@@ -90,8 +88,8 @@ function UserBadge({ mobile }: { mobile?: boolean }) {
           {profile?.avatar ? (
             <Image source={{ uri: profile.avatar }} className="h-full w-full" />
           ) : (
-            <View className="h-full w-full items-center justify-center bg-violet-500/30">
-              <Text className="text-xs font-semibold text-violet-100">
+            <View className="h-full w-full items-center justify-center bg-pink-500/30">
+              <Text className="text-xs font-semibold text-pink-100">
                 {session.handle[0]?.toUpperCase()}
               </Text>
             </View>

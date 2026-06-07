@@ -25,7 +25,7 @@ function IconLink({ href, active, children }: IconLinkProps) {
     >
       {active && (
         <View
-          className="absolute h-6 w-1 rounded-r-full bg-violet-400"
+          className="absolute h-6 w-1 rounded-r-full bg-pink-400"
           style={{ left: -8, top: '50%', transform: [{ translateY: -12 }] }}
         />
       )}

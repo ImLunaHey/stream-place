@@ -31,7 +31,7 @@ export function ContentWarningOverlay({ warnings, onAccept }: Props) {
         </View>
         <Pressable
           onPress={onAccept}
-          className="mt-5 rounded-md bg-violet-500 px-4 py-3"
+          className="mt-5 rounded-md bg-pink-500 px-4 py-3"
         >
           <Text className="text-center text-sm font-semibold text-white">
             OK, show stream

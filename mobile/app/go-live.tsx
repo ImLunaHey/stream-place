@@ -20,7 +20,7 @@ export default function GoLive() {
         </Text>
         <Pressable
           onPress={() => router.push('/login')}
-          className="mt-4 rounded-md bg-violet-500 px-4 py-2"
+          className="mt-4 rounded-md bg-pink-500 px-4 py-2"
         >
           <Text className="text-sm font-semibold text-white">Sign in</Text>
         </Pressable>
@@ -72,8 +72,8 @@ export default function GoLive() {
               key={`${i.type}:${i.url}`}
               className="flex-row items-center gap-2 rounded-md bg-zinc-900 p-2"
             >
-              <View className="rounded bg-violet-500/20 px-2 py-0.5">
-                <Text className="text-[10px] font-bold uppercase text-violet-200">
+              <View className="rounded bg-pink-500/20 px-2 py-0.5">
+                <Text className="text-[10px] font-bold uppercase text-pink-200">
                   {i.type}
                 </Text>
               </View>

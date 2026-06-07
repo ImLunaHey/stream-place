@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import {
   acknowledge,
   hasAcknowledged,
@@ -23,6 +23,7 @@ export function ChannelPlayer({ handle, stream }: Props) {
   const isLive = !!stream
   const meta = useSegmentMeta(handle)
   const [acknowledged, setAcknowledged] = useState(false)
+  const isWeb = Platform.OS === 'web'
 
   const poster = stream?.record.thumb
     ? thumbUrl(stream.author.did, stream.record.thumb.ref.$link)
@@ -50,10 +51,26 @@ export function ChannelPlayer({ handle, stream }: Props) {
     )
   }
 
+  const reportStream = () => {
+    if (isWeb && stream)
+      window.open(`https://bsky.app/profile/${stream.author.handle}`, '_blank')
+  }
+  const reportUser = () => {
+    if (isWeb) window.open(`https://bsky.app/profile/${handle}`, '_blank')
+  }
+
   return (
     <View className="relative aspect-video w-full bg-black">
-      <Player src={src} poster={poster} live />
-      {!showWarning && (
+      <Player
+        src={src}
+        poster={poster}
+        live
+        viewerCount={stream?.viewerCount?.count}
+        onReportStream={reportStream}
+        onReportUser={reportUser}
+      />
+      {/* Native renders bare live/viewer pills above the native controls */}
+      {!isWeb && !showWarning && (
         <View
           pointerEvents="none"
           className="absolute left-3 top-3 flex-row items-center gap-1.5 rounded bg-rose-600 px-2 py-1"
@@ -65,7 +82,7 @@ export function ChannelPlayer({ handle, stream }: Props) {
           </Text>
         </View>
       )}
-      {!showWarning && stream?.viewerCount && (
+      {!isWeb && !showWarning && stream?.viewerCount && (
         <View
           pointerEvents="none"
           className="absolute right-3 top-3 rounded bg-black/70 px-2 py-1"

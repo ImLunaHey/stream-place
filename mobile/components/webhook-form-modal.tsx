@@ -130,12 +130,12 @@ export function WebhookFormModal({
                     )
                   }
                   className={`rounded-md px-2.5 py-1.5 ${
-                    checked ? 'bg-violet-500/20' : 'bg-white/5'
+                    checked ? 'bg-pink-500/20' : 'bg-white/5'
                   }`}
                 >
                   <Text
                     className={`text-xs font-semibold uppercase tracking-wider ${
-                      checked ? 'text-violet-100' : 'text-zinc-400'
+                      checked ? 'text-pink-100' : 'text-zinc-400'
                     }`}
                   >
                     {e}
@@ -169,7 +169,7 @@ export function WebhookFormModal({
             <Pressable
               onPress={submit}
               disabled={isLoading || events.length === 0}
-              className="flex-row items-center gap-2 rounded-md bg-violet-500 px-4 py-2"
+              className="flex-row items-center gap-2 rounded-md bg-pink-500 px-4 py-2"
               style={{
                 opacity: isLoading || events.length === 0 ? 0.6 : 1,
               }}
