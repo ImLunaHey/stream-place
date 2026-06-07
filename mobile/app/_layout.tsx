@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AppShell } from '../components/app-shell'
+import { BuildTag } from '../components/build-tag'
 import '../global.css'
 
 export default function RootLayout() {
@@ -17,6 +18,7 @@ export default function RootLayout() {
           <AppShell>
             <Slot />
           </AppShell>
+          <BuildTag />
         </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
